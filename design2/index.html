@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary-fixed": "#281900",
+                "on-primary-fixed": "#001b3c",
+                "on-tertiary-container": "#bd985e",
+                "primary-fixed": "#d5e3ff",
+                "surface-bright": "#faf9fc",
+                "on-secondary": "#ffffff",
+                "secondary": "#b02d2c",
+                "surface-container-highest": "#e3e2e5",
+                "inverse-primary": "#b0c7f1",
+                "on-tertiary-fixed-variant": "#5d4210",
+                "on-primary-fixed-variant": "#30476a",
+                "secondary-fixed-dim": "#ffb3ad",
+                "primary": "#031f41",
+                "secondary-container": "#fe665f",
+                "tertiary-fixed": "#ffdeae",
+                "surface-dim": "#dbd9dd",
+                "primary-container": "#1d3557",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#efedf1",
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#690009",
+                "surface-tint": "#485f84",
+                "on-secondary-fixed-variant": "#8e1217",
+                "inverse-on-surface": "#f2f0f3",
+                "on-error": "#ffffff",
+                "secondary-fixed": "#ffdad6",
+                "tertiary": "#2d1c00",
+                "on-secondary-fixed": "#410003",
+                "surface-container-high": "#e9e7eb",
+                "outline-variant": "#c4c6cf",
+                "on-background": "#1b1b1e",
+                "error-container": "#ffdad6",
+                "surface": "#faf9fc",
+                "tertiary-container": "#493000",
+                "on-surface-variant": "#44474e",
+                "background": "#faf9fc",
+                "on-primary-container": "#879ec6",
+                "error": "#ba1a1a",
+                "surface-variant": "#e3e2e5",
+                "surface-container-low": "#f5f3f6",
+                "primary-fixed-dim": "#b0c7f1",
+                "on-surface": "#1b1b1e",
+                "on-primary": "#ffffff",
+                "outline": "#74777f",
+                "on-error-container": "#93000a",
+                "inverse-surface": "#2f3033",
+                "tertiary-fixed-dim": "#e9c083"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-mobile": "16px",
+                "margin-tablet": "32px",
+                "container-max": "1280px",
+                "margin-desktop": "64px",
+                "base": "8px",
+                "gutter": "24px"
+            },
+            "fontFamily": {
+                "headline-lg-mobile": ["Inter"],
+                "headline-md": ["Inter"],
+                "body-md": ["Inter"],
+                "label-sm": ["Inter"],
+                "headline-lg": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-xl": ["Inter"]
+            },
+            "fontSize": {
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .ticker-container { overflow: hidden; white-space: nowrap; }
+        .ticker-wrapper { display: inline-block; animation: ticker 40s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .reveal { opacity: 0; transform: translateY(30px); }
+    </style>
+</head>
+<body class="bg-background text-on-background overflow-x-hidden antialiased">
+<!-- Header (from SCREEN_7) -->
+<header class="fixed top-0 z-50 w-full bg-primary h-20 flex justify-between items-center px-margin-mobile border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-primary text-3xl" data-icon="train">train</span>
+<img alt="IMA Soluciones Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uivtxRbTJGU_x3-c_ZGdis0oryg_THkdKZ194AudA-PbJ_CiwrVXUHGNg-8xdb1Q_IsVoTMZVKVVvfBGjzYrlb3Po7fOsKuyc1IvyFnVCdR2Ma4lY7Efzpc2qt4S6uAMTlEl9PTW32mDn1iLws-WENgOUkDiYUfMfT0ExL6Me8rpdYHXDQcik4knNcfdreiSSP5CIRJ9eXmpqSxGIhW9Ner1EldcAAYHT0iYv8lUf2JnucC6J5pEeXKv9lQ-vdZRRnzaomQXlMbdso"/>
+</div>
+<button class="text-on-primary">
+<span class="material-symbols-outlined text-4xl" data-icon="menu">menu</span>
+</button>
+</header>
+<main class="mt-20">
+<!-- Introduction/Hero (SCREEN_7) -->
+<section class="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden" id="hero">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="High-angle professional railway catenary systems at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWkhi3eaSMN-0ldDtU6qPEZLCVXZJlS9wXr3AHT5T8A0eAOOq4zStk2WGr7LnUrdtxovLMFvnsq-hahLGdXGpbQh4UQWE0zeh7Wzcg4-6oavT58u7CDeG6Jv9k0Mw7bfX7kGdlvpVTWFdPTSY3_QGJDQG-iR_hTBRsmV1rqJ-O8wIitHroNU4fElDdTgKVWXnPPzHwx332zJRBNeN6nAD7dAR76-BU3z3ZmZtjLqdrcC6avRHaBz5bj6wBhUJVf0fWlOYZX1Mtpns3"/>
+<div class="absolute inset-0 bg-primary/70"></div>
+</div>
+<div class="relative z-10 w-full px-margin-mobile">
+<div class="max-w-3xl border-l-8 border-secondary pl-6 reveal">
+<h1 class="font-headline-xl text-headline-xl text-white mb-6 leading-tight">
+                    Líderes en Electrificación Ferroviaria en México
+                </h1>
+<p class="font-body-lg text-body-lg text-primary-fixed max-w-2xl mb-10">
+                    Expertos en ingeniería, instalación y mantenimiento electromecánico para transporte masivo y energía.
+                </p>
+<div class="flex flex-col gap-4">
+<button class="bg-secondary text-white px-8 py-4 font-headline-md rounded hover:bg-secondary-container transition-all">
+                        Explorar Proyectos
+                    </button>
+<button class="border-2 border-white text-white px-8 py-4 font-headline-md rounded hover:bg-white hover:text-primary transition-all">
+                        Ver Servicios
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<!-- About Us (SCREEN_7 + SCREEN_2) -->
+<section class="py-20 bg-surface" id="about">
+<div class="px-margin-mobile max-w-container-max mx-auto">
+<div class="reveal">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4 block">Sobre Nosotros</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-8">
+                    Excelencia Técnica en Infraestructura de Energía
+                </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10">
+                    IMA Soluciones (Ingenieros en Mantenimiento Aplicado S.A. de C.V.) se ha consolidado como el socio estratégico preferente para los proyectos de transporte masivo más ambiciosos.
+                </p>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-6 py-10 border-y border-outline-variant reveal">
+<div>
+<span class="font-headline-xl text-headline-xl text-primary block">20+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Años de Experiencia</span>
+</div>
+<div>
+<span class="font-headline-xl text-headline-xl text-primary block">100+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Proyectos Exitosos</span>
+</div>
+</div>
+<!-- Mission/Vision (from SCREEN_2) -->
+<div class="grid grid-cols-1 gap-6 mt-16">
+<div class="p-8 border border-outline-variant bg-white reveal">
+<span class="material-symbols-outlined text-secondary mb-4" style="font-size: 40px;">rocket_launch</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Nuestra Misión</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Proporcionamos soluciones de ingeniería de alta precisión que garantizan la seguridad y eficiencia en sistemas de electrificación ferroviaria, impulsando la movilidad sostenible.
+                    </p>
+</div>
+<div class="p-8 border border-outline-variant bg-white reveal">
+<span class="material-symbols-outlined text-secondary mb-4" style="font-size: 40px;">visibility</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-4">Nuestra Visión</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Ser el socio estratégico líder en el desarrollo de infraestructura crítica, reconocidos por nuestra integridad estructural, excelencia técnica e innovación constante.
+                    </p>
+</div>
+</div>
+<!-- Image Section -->
+<div class="mt-16 reveal">
+<div class="relative bg-primary-container p-3">
+<img alt="Engineer inspecting substation" class="w-full aspect-square object-cover shadow-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4Ficw06urLhoNl03JYjN12JjiZqph9bm-9d8oSXzdnP6LV4C6RuIL9qGFhqXgT8f1tavCO7_vvqLvckaqJ0u5EZhRps9YuARkplUIEiIomKeJ8IMpy1TGriX8IPrjEBc8fGkFH3wFyM4NrE2Vjfomk6XUCiFThNgPikXkjCnluAPeDHSMKOtV0Sp9P0_M54Ce_AXfZIEkgw7mRai34W1drRnCMPEUIGnVEm48fsz_zg0lbVElD69M3896_qtQnpaBoegQuIZD14lL"/>
+<div class="absolute -bottom-4 left-4 right-4 bg-secondary p-6 text-white text-center">
+<p class="font-headline-md text-headline-md font-bold italic">"Precisión en cada voltio, seguridad en cada tramo."</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Services (SCREEN_6) -->
+<section class="py-20 bg-surface-container-low" id="services">
+<div class="px-margin-mobile max-w-container-max mx-auto">
+<div class="mb-12 reveal text-center">
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2">Our Expertise</p>
+<h2 class="font-headline-xl text-headline-xl text-primary">Servicios de Ingeniería Ferroviaria</h2>
+<div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+</div>
+<div class="space-y-8">
+<!-- Engineering Card -->
+<div class="group bg-white border border-outline-variant p-6 reveal shadow-sm">
+<div class="w-14 h-14 bg-primary-container flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="architecture">architecture</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Engineering</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                        Diseño y planificación especializada para sistemas de catenaria, subestaciones y redes de distribución de energía en alta tensión.
+                    </p>
+<div class="relative h-48 overflow-hidden mb-6">
+<img class="w-full h-full object-cover" data-alt="Engineering blueprints" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ7iddSnxdjpCM2tWhDrZ5BLLSiC-kuOeSQs9zl1JRSYHMdz9MhC-a0_fraHi0RaH0qxQnVlqbN7ZsXD0Psb458eH-9tCuoxilrTq3Jss7jtif1ga6O2L8BWJ9dy8IPruk9bFpsoP5huh8XxBhTkDf2MZ9yo6izifcHxLf20LSKQItMu8Nb-vuUtykcdqyv2LPMVbzvcc7A_Yi8FI1sIXJfHCO2UXNU46mFs6cHNWkZxCa8y5UlDDYCI1SD0VljN-nwifYCcsB7VaX"/>
+</div>
+<button class="text-secondary font-bold font-label-sm flex items-center gap-2">
+                        VIEW DETAILS <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Installation Card -->
+<div class="group bg-white border border-outline-variant p-6 reveal shadow-sm">
+<div class="w-14 h-14 bg-secondary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="construction">construction</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Installation</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                        Ejecución de precisión en proyectos electromecánicos complejos, desde el tendido de líneas hasta el montaje de subestaciones.
+                    </p>
+<div class="relative h-48 overflow-hidden mb-6">
+<img class="w-full h-full object-cover" data-alt="Workers installing catenary wires" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7yu12AsGCt-AClOm6GV5sywRFuiw8bOlnXh1o_dNCQakXxJ3Q8zbonrCktjAtbQTyo2BcxugcJyU4gJgbD5RbpZ5qhSGiXRGjFUDWk2TCstMCt0uHN6mMGGg-p7f6C2pTmuUxAcSh2BU97uomKYYtGqye30Z-14jwFGCY14_2ON9ugSSk4NRUx7RC0WjzNdcAz6AzZs7VkpvH-dcKhrXRqy-4m27r0yQwIx7jsK9kRHOmQMmtJsGcejQyW8oAnMiqr5qxCTcxe_UK"/>
+</div>
+<button class="text-secondary font-bold font-label-sm flex items-center gap-2">
+                        VIEW DETAILS <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Maintenance Card -->
+<div class="group bg-white border border-outline-variant p-6 reveal shadow-sm">
+<div class="w-14 h-14 bg-primary flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-white text-3xl" data-icon="build_circle">build_circle</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Maintenance</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                        Programas preventivos y correctivos que aseguran la máxima confiabilidad operativa y vida útil de los activos ferroviarios.
+                    </p>
+<div class="relative h-48 overflow-hidden mb-6">
+<img class="w-full h-full object-cover" data-alt="Electromechanical maintenance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2oDNwqPy0KerX5hNlK3Fxn--fuzrs4i2YD4aagj5Dx6je_fB0lveP0VvDcdqtuvBtG9nDqGcGdhWwzF9N4x5949uGWcgcoeROYQ1C-PfiXbcF7K_XPYBqCYS8iB0qvozIAmEPnPqy-MimCCgh3meydyqiFVBAxYXZW3dRMW2j3vZQq3yeq8EpXGlGITOM1ER6CZlSbZft8QfoudNsam1wYohOzWQzyLrSKI8EybEBoJV-dNPmp63W06P_Hx306xRon-ThhPGd8RU_"/>
+</div>
+<button class="text-secondary font-bold font-label-sm flex items-center gap-2">
+                        VIEW DETAILS <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Presence (SCREEN_8) -->
+<section class="py-20 bg-white" id="presence">
+<div class="px-margin-mobile max-w-container-max mx-auto">
+<div class="reveal">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4 block">Alcance Global</span>
+<h2 class="font-headline-xl text-headline-xl text-primary leading-tight mb-6">Presencia Nacional e Internacional</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10">
+                    Desplegamos soluciones de ingeniería de alta precisión a través de fronteras continentales.
+                </p>
+</div>
+<!-- Map Representation -->
+<div class="bg-surface-container-low p-4 border border-outline-variant mb-8 reveal">
+<div class="relative h-64 overflow-hidden mb-6">
+<img class="w-full h-full object-cover opacity-20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfcswxqF8ccECerJ1tQOsLyI96Uj5gTrCUhTpkE8vmb8P4Felv16IuDfBeKBlveVhr-y9RLrifd8HYflsTi72GyCGGJe5oCiSgahElSlnW-e3jbe-0hsBzEjwiOTM6pESIj6Z3Bdu1vcdCH5GckBPC6sKd5nugTWe1eqSgCIuscSV-o5hrNoXfn_94U6wPLf9LaNtjpTFv4HUWdBWOUb6ZQHLciOYYje9cXn-QOzdQf7rE5oPF4TgQuI7F_Jro9vMO6b9TdnTuS8kU"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white border border-primary p-4 shadow-lg scale-90">
+<span class="font-label-sm text-secondary uppercase block mb-1">Central Hub</span>
+<h4 class="font-headline-md text-primary">México</h4>
+<p class="text-xs text-on-surface-variant">Sede operativa principal.</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-white border border-outline-variant text-center">
+<div class="text-primary font-headline-lg">5</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-bold">Países</div>
+</div>
+<div class="p-4 bg-white border border-outline-variant text-center">
+<div class="text-secondary font-headline-lg">200+</div>
+<div class="text-[10px] text-on-surface-variant uppercase font-bold">Proyectos</div>
+</div>
+</div>
+</div>
+<div class="reveal mt-12">
+<h3 class="font-headline-lg text-primary mb-6">Ingeniería sin Fronteras</h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-on-surface">Cumplimiento de normativas IEC/IEEE internacionales.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-on-surface">Logística técnica especializada para proyectos remotos.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="check_circle">check_circle</span>
+<span class="font-body-md text-on-surface">Certificación global en procesos de alta tensión.</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Alliances (SCREEN_5) -->
+<section class="py-20 bg-surface" id="alliances">
+<div class="px-margin-mobile max-w-container-max mx-auto">
+<div class="text-center mb-16 reveal">
+<span class="font-label-sm text-secondary uppercase tracking-[0.2em] mb-4 block">Nuestros Clientes y Aliados</span>
+<h2 class="font-headline-xl text-primary">Ecosistema de Colaboración</h2>
+<div class="w-16 h-1 bg-secondary mx-auto mt-4"></div>
+</div>
+<!-- Logo Ticker -->
+<div class="ticker-container mb-16 reveal">
+<div class="ticker-wrapper flex items-center gap-12 py-4">
+<!-- Set 1 -->
+<img alt="Partner Logo" class="h-8 object-contain grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBk5K2R3qWitZjcyWpr_zAbFp76avPE7wwCq10ZceFlUNiV5JUzWFV0IHbi5zQZZ9EmuOi_tzzVE8kYkFDuh9BN9NvkPaH26Jlm4ngq1nOpwRHm9_jo6-8ctkVlVXlZyOmePRAqMJEVz8GsGheaRSEPhnOrPWgpoGitzQrdUUTu0J82AYT_09X9PXx40DhNCEu1FCnxFLcgy-OaEFpnfsC1Ug3gXP602U9mLTvkjvBjVGO0hiH9PzB4xg38FIoC7ot1bZUrIGG5uMq"/>
+<img alt="Partner Logo" class="h-8 object-contain grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWhl-nZGwF0tUEhEI7NAb7S6XbXiUoopq_ogMZnfbZ9Tfht_LDwnZ8D-zsT4fYJiqe4MDW8bHgTPhUSPu0FmTtR8FLolvhf6Zo51wj2yfvYQIfA4QzotAjlONbrZrfPBlDx46-YvVD6KwIAFv-2MQNcsOwGNbNjFk-31Ud1YSFWsu6ploPWiv9s7N0Rl6LIRitak4eJqG-0xegH95pqrQ7cXGPk9ZgfyskG-nzW3V7jciKslaCP-r_-yokyT2YzrOlN74pomwf5-7L"/>
+<img alt="Partner Logo" class="h-8 object-contain grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCywX9y3cLrn8i-bFCtJ1hN2BD-7JYLkF5EzlVs6AnRMneh1J68iL0mUy7l4LFMMsdu6N5c1RKldrzsFrEu0pDNiwrifdOck-9WE0JHXwEiNoUn_awq7Q0icM2wIalNC5e4rgDcxSdGbJal0g3NSy-8G8Xz4Omu1Sea-kGCwwu0BAS_9dr8TAZd8l6o6dNXD8qGouuVHT-oReBs7-LjFkOHp17MGOuYIhDKvqV6RzBn7ZRdxy60mfF12Y1lunsb4c-P_7fMFE43mTHt"/>
+<!-- Duplicate for loop -->
+<img alt="Partner Logo" class="h-8 object-contain grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBk5K2R3qWitZjcyWpr_zAbFp76avPE7wwCq10ZceFlUNiV5JUzWFV0IHbi5zQZZ9EmuOi_tzzVE8kYkFDuh9BN9NvkPaH26Jlm4ngq1nOpwRHm9_jo6-8ctkVlVXlZyOmePRAqMJEVz8GsGheaRSEPhnOrPWgpoGitzQrdUUTu0J82AYT_09X9PXx40DhNCEu1FCnxFLcgy-OaEFpnfsC1Ug3gXP602U9mLTvkjvBjVGO0hiH9PzB4xg38FIoC7ot1bZUrIGG5uMq"/>
+<img alt="Partner Logo" class="h-8 object-contain grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWhl-nZGwF0tUEhEI7NAb7S6XbXiUoopq_ogMZnfbZ9Tfht_LDwnZ8D-zsT4fYJiqe4MDW8bHgTPhUSPu0FmTtR8FLolvhf6Zo51wj2yfvYQIfA4QzotAjlONbrZrfPBlDx46-YvVD6KwIAFv-2MQNcsOwGNbNjFk-31Ud1YSFWsu6ploPWiv9s7N0Rl6LIRitak4eJqG-0xegH95pqrQ7cXGPk9ZgfyskG-nzW3V7jciKslaCP-r_-yokyT2YzrOlN74pomwf5-7L"/>
+</div>
+</div>
+<!-- Aliances Cards -->
+<div class="space-y-6">
+<div class="bg-white border border-outline-variant p-8 text-center reveal">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4" data-icon="electric_bolt">electric_bolt</span>
+<h3 class="font-headline-md text-primary mb-4">Electrificación</h3>
+<p class="font-body-md text-on-surface-variant mb-6">Sistemas de catenaria y subestaciones de tracción con tecnología líder.</p>
+<ul class="text-xs font-bold text-outline space-y-2 border-t border-outline-variant pt-6">
+<li>SIEMENS MOBILITY</li>
+<li>ALSTOM RAIL</li>
+</ul>
+</div>
+<div class="bg-primary-container p-8 text-center text-white reveal border-t-4 border-secondary">
+<span class="material-symbols-outlined text-secondary text-4xl mb-4" data-icon="handshake">handshake</span>
+<h3 class="font-headline-md mb-4">Proyectos Estratégicos</h3>
+<p class="font-body-md opacity-80 mb-6">Joint ventures para infraestructuras de gran escala y complejidad técnica.</p>
+<ul class="text-xs font-bold space-y-2 border-t border-white/20 pt-6">
+<li>INGENIERÍA AVANZADA LATAM</li>
+<li>GRUPO CONSTRUCTOR FERRO</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-20 bg-primary text-center px-margin-mobile">
+<div class="reveal">
+<h2 class="font-headline-lg text-white mb-6">¿Listo para impulsar su próximo proyecto?</h2>
+<p class="font-body-md text-primary-fixed opacity-80 mb-10">
+                Contamos con el equipo y la tecnología para hacer realidad las infraestructuras ferroviarias más exigentes.
+            </p>
+<button class="bg-secondary text-white font-headline-md px-10 py-5 rounded shadow-lg hover:brightness-110 active:scale-95 transition-all w-full">
+                Contáctanos Hoy
+            </button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary border-t border-outline-variant py-12 px-margin-mobile">
+<div class="flex flex-col gap-8">
+<div class="space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white text-2xl" data-icon="train">train</span>
+<span class="font-headline-md text-white font-black">IMA Soluciones</span>
+</div>
+<p class="font-body-md text-on-primary opacity-70">
+                Ingeniería, Instalación y Mantenimiento de infraestructura eléctrica ferroviaria de clase mundial.
+            </p>
+</div>
+<div class="grid grid-cols-2 gap-4 border-t border-outline-variant pt-8">
+<div class="flex flex-col gap-2">
+<a class="text-xs text-on-primary opacity-60" href="#">Engineering</a>
+<a class="text-xs text-on-primary opacity-60" href="#">Maintenance</a>
+<a class="text-xs text-on-primary opacity-60" href="#">Alliances</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="text-xs text-on-primary opacity-60" href="#">Projects</a>
+<a class="text-xs text-on-primary opacity-60" href="#">Privacy Policy</a>
+<a class="text-xs text-secondary font-bold underline" href="#">About Us</a>
+</div>
+</div>
+<p class="text-[10px] text-on-primary opacity-40 mt-4">
+            © 2024 IMA Soluciones - Ingenieros en Mantenimiento Aplicado S.A. de C.V.
+        </p>
+</div>
+</footer>
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Fade-in reveal animations for sections
+    const reveals = gsap.utils.toArray('.reveal');
+    reveals.forEach((elem) => {
+        gsap.to(elem, {
+            scrollTrigger: {
+                trigger: elem,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out'
+        });
+    });
+
+    // Header transparency change on scroll
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+            header.classList.add('bg-primary/95', 'backdrop-blur-sm', 'shadow-md');
+        } else {
+            header.classList.remove('bg-primary/95', 'backdrop-blur-sm', 'shadow-md');
+        }
+    });
+</script>
+</body></html>
