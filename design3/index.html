@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Usar Host Grotesk o Inter tight -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary-fixed": "#281900",
+                "on-primary-fixed": "#001b3c",
+                "on-tertiary-container": "#bd985e",
+                "primary-fixed": "#d5e3ff",
+                "surface-bright": "#faf9fc",
+                "on-secondary": "#ffffff",
+                "secondary": "#eafc53", /* Framer Lime Accent */
+                "surface-container-highest": "#e3e2e5",
+                "inverse-primary": "#b0c7f1",
+                "on-tertiary-fixed-variant": "#5d4210",
+                "on-primary-fixed-variant": "#30476a",
+                "secondary-fixed-dim": "#d9f243",
+                "primary": "#031f41",
+                "secondary-container": "#eafc53",
+                "tertiary-fixed": "#ffdeae",
+                "surface-dim": "#dbd9dd",
+                "primary-container": "#031f41",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#f4f4f5", /* Soft Framer Background */
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#031f41", /* Dark text on lime */
+                "surface-tint": "#485f84",
+                "on-secondary-fixed-variant": "#000000",
+                "inverse-on-surface": "#f2f0f3",
+                "on-error": "#ffffff",
+                "secondary-fixed": "#eafc53",
+                "tertiary": "#2d1c00",
+                "on-secondary-fixed": "#000000",
+                "surface-container-high": "#e9e7eb",
+                "outline-variant": "#e4e4e7",
+                "on-background": "#18181b",
+                "error-container": "#ffdad6",
+                "surface": "#f4f4f5", /* Framer Background */
+                "tertiary-container": "#493000",
+                "on-surface-variant": "#52525b",
+                "background": "#fafafa", /* Ultra Light Gray */
+                "on-primary-container": "#ffffff",
+                "error": "#ba1a1a",
+                "surface-variant": "#e3e2e5",
+                "surface-container-low": "#fafafa",
+                "primary-fixed-dim": "#b0c7f1",
+                "on-surface": "#18181b",
+                "on-primary": "#ffffff",
+                "outline": "#a1a1aa",
+                "on-error-container": "#93000a",
+                "inverse-surface": "#2f3033",
+                "tertiary-fixed-dim": "#e9c083"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.5rem",
+                "lg": "1rem",
+                "xl": "1.5rem",
+                "2xl": "1.75rem",
+                "3xl": "2rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "margin-mobile": "24px",
+                "margin-tablet": "40px",
+                "container-max": "1280px",
+                "margin-desktop": "80px",
+                "base": "8px",
+                "gutter": "24px"
+            },
+            "fontFamily": {
+                "headline": ["Inter"],
+                "body": ["Inter"],
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        
+        /* Ticker Animation */
+        .ticker-container { overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .ticker-wrapper { display: inline-block; animation: ticker 40s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        /* GSAP Initial States */
+        .reveal { opacity: 0; visibility: hidden; }
+        .clip-reveal { clip-path: inset(100% 0 0 0); }
+
+        /* Accordion CSS for Hover/Active Expansion */
+        .accordion-item {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 80px;
+            overflow: hidden;
+        }
+        .accordion-item:hover, .accordion-item.active {
+            max-height: 400px;
+            background-color: white;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .btn-hover-fx {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-hover-fx:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background overflow-x-hidden antialiased selection:bg-secondary selection:text-primary">
+
+<!-- Floating Pill Header (Framer Style) -->
+<header id="navbar" class="fixed top-4 left-0 right-0 z-50 mx-auto w-[92%] max-w-[1100px] h-[72px] bg-white/80 backdrop-blur-2xl flex justify-between items-center px-6 rounded-full border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-700 ease-in-out transform translate-y-0">
+    <div class="flex items-center gap-4">
+        <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-2xl" data-icon="train">train</span>
+        </div>
+        <span class="font-bold text-xl tracking-tight text-primary">IMA Soluciones</span>
+    </div>
+    
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8">
+        <a href="#about" class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Nosotros</a>
+        <a href="#services" class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Servicios</a>
+        <a href="#presence" class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">Presencia</a>
+    </nav>
+
+    <button class="hidden md:block bg-secondary text-on-secondary-container px-6 py-3 font-semibold text-sm rounded-full hover:bg-[#d9ef38] transition-all btn-hover-fx shadow-sm">
+        Contactar Experto
+    </button>
+
+    <button class="md:hidden text-primary">
+        <span class="material-symbols-outlined text-3xl" data-icon="menu">menu</span>
+    </button>
+</header>
+
+<main>
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-margin-mobile max-w-[1400px] mx-auto flex flex-col items-center text-center" id="hero">
+        <div class="max-w-4xl z-10">
+            <div class="inline-block bg-white border border-outline-variant px-4 py-2 rounded-full mb-8 shadow-sm reveal">
+                <span class="text-xs font-bold tracking-widest uppercase text-on-surface-variant">Elevating Infrastructure</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-primary mb-8 leading-[1.05] reveal">
+                Líderes en Electrificación Ferroviaria en México.
+            </h1>
+            
+            <p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto mb-10 reveal">
+                Ingeniería de vanguardia, instalación y mantenimiento electromecánico para proyectos de transporte masivo que perduran.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal">
+                <button class="w-full sm:w-auto bg-primary text-white px-8 py-4 font-semibold rounded-full btn-hover-fx">
+                    Explorar Proyectos
+                </button>
+                <button class="w-full sm:w-auto bg-white border border-outline-variant text-primary px-8 py-4 font-semibold rounded-full hover:bg-surface-container transition-colors btn-hover-fx shadow-sm">
+                    Ver Servicios
+                </button>
+            </div>
+        </div>
+
+        <!-- Hero Image Masked (Framer Style Scale Reveal) -->
+        <div class="w-full mt-16 md:mt-24 h-[50vh] md:h-[70vh] rounded-[2rem] overflow-hidden relative shadow-2xl reveal-img">
+            <img class="w-full h-full object-cover scale-110 image-parallax" data-alt="Railway catenary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWkhi3eaSMN-0ldDtU6qPEZLCVXZJlS9wXr3AHT5T8A0eAOOq4zStk2WGr7LnUrdtxovLMFvnsq-hahLGdXGpbQh4UQWE0zeh7Wzcg4-6oavT58u7CDeG6Jv9k0Mw7bfX7kGdlvpVTWFdPTSY3_QGJDQG-iR_hTBRsmV1rqJ-O8wIitHroNU4fElDdTgKVWXnPPzHwx332zJRBNeN6nAD7dAR76-BU3z3ZmZtjLqdrcC6avRHaBz5bj6wBhUJVf0fWlOYZX1Mtpns3"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Logo Ticker -->
+    <section class="py-12 border-y border-outline-variant/50 bg-white reveal">
+        <div class="ticker-container">
+            <div class="ticker-wrapper flex items-center gap-16 py-2">
+                <img alt="Partner" class="h-8 object-contain grayscale opacity-40 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBk5K2R3qWitZjcyWpr_zAbFp76avPE7wwCq10ZceFlUNiV5JUzWFV0IHbi5zQZZ9EmuOi_tzzVE8kYkFDuh9BN9NvkPaH26Jlm4ngq1nOpwRHm9_jo6-8ctkVlVXlZyOmePRAqMJEVz8GsGheaRSEPhnOrPWgpoGitzQrdUUTu0J82AYT_09X9PXx40DhNCEu1FCnxFLcgy-OaEFpnfsC1Ug3gXP602U9mLTvkjvBjVGO0hiH9PzB4xg38FIoC7ot1bZUrIGG5uMq"/>
+                <img alt="Partner" class="h-8 object-contain grayscale opacity-40 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWhl-nZGwF0tUEhEI7NAb7S6XbXiUoopq_ogMZnfbZ9Tfht_LDwnZ8D-zsT4fYJiqe4MDW8bHgTPhUSPu0FmTtR8FLolvhf6Zo51wj2yfvYQIfA4QzotAjlONbrZrfPBlDx46-YvVD6KwIAFv-2MQNcsOwGNbNjFk-31Ud1YSFWsu6ploPWiv9s7N0Rl6LIRitak4eJqG-0xegH95pqrQ7cXGPk9ZgfyskG-nzW3V7jciKslaCP-r_-yokyT2YzrOlN74pomwf5-7L"/>
+                <img alt="Partner" class="h-8 object-contain grayscale opacity-40 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCywX9y3cLrn8i-bFCtJ1hN2BD-7JYLkF5EzlVs6AnRMneh1J68iL0mUy7l4LFMMsdu6N5c1RKldrzsFrEu0pDNiwrifdOck-9WE0JHXwEiNoUn_awq7Q0icM2wIalNC5e4rgDcxSdGbJal0g3NSy-8G8Xz4Omu1Sea-kGCwwu0BAS_9dr8TAZd8l6o6dNXD8qGouuVHT-oReBs7-LjFkOHp17MGOuYIhDKvqV6RzBn7ZRdxy60mfF12Y1lunsb4c-P_7fMFE43mTHt"/>
+                <img alt="Partner" class="h-8 object-contain grayscale opacity-40 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBk5K2R3qWitZjcyWpr_zAbFp76avPE7wwCq10ZceFlUNiV5JUzWFV0IHbi5zQZZ9EmuOi_tzzVE8kYkFDuh9BN9NvkPaH26Jlm4ngq1nOpwRHm9_jo6-8ctkVlVXlZyOmePRAqMJEVz8GsGheaRSEPhnOrPWgpoGitzQrdUUTu0J82AYT_09X9PXx40DhNCEu1FCnxFLcgy-OaEFpnfsC1Ug3gXP602U9mLTvkjvBjVGO0hiH9PzB4xg38FIoC7ot1bZUrIGG5uMq"/>
+                <img alt="Partner" class="h-8 object-contain grayscale opacity-40 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWhl-nZGwF0tUEhEI7NAb7S6XbXiUoopq_ogMZnfbZ9Tfht_LDwnZ8D-zsT4fYJiqe4MDW8bHgTPhUSPu0FmTtR8FLolvhf6Zo51wj2yfvYQIfA4QzotAjlONbrZrfPBlDx46-YvVD6KwIAFv-2MQNcsOwGNbNjFk-31Ud1YSFWsu6ploPWiv9s7N0Rl6LIRitak4eJqG-0xegH95pqrQ7cXGPk9ZgfyskG-nzW3V7jciKslaCP-r_-yokyT2YzrOlN74pomwf5-7L"/>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services (Framer Expandable Accordion Style) -->
+    <section class="py-32 px-margin-mobile bg-surface" id="services">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-primary mb-4">Soluciones Especializadas</h2>
+                <p class="text-lg text-on-surface-variant">Capacidad técnica integral para infraestructura de misión crítica.</p>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                
+                <!-- Accordion Card 1 -->
+                <div class="accordion-item bg-white border border-outline-variant/60 rounded-3xl p-6 md:p-8 cursor-pointer relative reveal shadow-sm">
+                    <div class="flex justify-between items-center pointer-events-none">
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center">
+                                <span class="font-bold text-primary">01</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary tracking-tight">Sistema de Catenaria</h3>
+                        </div>
+                        <span class="material-symbols-outlined text-outline">add</span>
+                    </div>
+                    
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 opacity-0 transition-opacity duration-500 delay-100 content-reveal">
+                        <div>
+                            <p class="text-on-surface-variant leading-relaxed mb-6">
+                                Diseño, cálculo estructural e instalación de sistemas de catenaria flexible y rígida para transporte masivo (Metro, Trenes Ligeros y Ferrocarril Convencional).
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-semibold bg-surface px-3 py-1 rounded-full text-primary">Instalación</span>
+                                <span class="text-xs font-semibold bg-surface px-3 py-1 rounded-full text-primary">Renovación</span>
+                                <span class="text-xs font-semibold bg-surface px-3 py-1 rounded-full text-primary">Pruebas</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden h-40">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7yu12AsGCt-AClOm6GV5sywRFuiw8bOlnXh1o_dNCQakXxJ3Q8zbonrCktjAtbQTyo2BcxugcJyU4gJgbD5RbpZ5qhSGiXRGjFUDWk2TCstMCt0uHN6mMGGg-p7f6C2pTmuUxAcSh2BU97uomKYYtGqye30Z-14jwFGCY14_2ON9ugSSk4NRUx7RC0WjzNdcAz6AzZs7VkpvH-dcKhrXRqy-4m27r0yQwIx7jsK9kRHOmQMmtJsGcejQyW8oAnMiqr5qxCTcxe_UK"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Card 2 -->
+                <div class="accordion-item bg-white border border-outline-variant/60 rounded-3xl p-6 md:p-8 cursor-pointer relative reveal shadow-sm">
+                    <div class="flex justify-between items-center pointer-events-none">
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center">
+                                <span class="font-bold text-primary">02</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary tracking-tight">Electromecánica</h3>
+                        </div>
+                        <span class="material-symbols-outlined text-outline">add</span>
+                    </div>
+                    
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 opacity-0 transition-opacity duration-500 delay-100 content-reveal">
+                        <div>
+                            <p class="text-on-surface-variant leading-relaxed mb-6">
+                                Construcción y equipamiento de subestaciones de tracción, cuartos técnicos y cableado estructurado industrial de alta capacidad.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs font-semibold bg-surface px-3 py-1 rounded-full text-primary">Subestaciones</span>
+                                <span class="text-xs font-semibold bg-surface px-3 py-1 rounded-full text-primary">Alta Tensión</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden h-40">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2oDNwqPy0KerX5hNlK3Fxn--fuzrs4i2YD4aagj5Dx6je_fB0lveP0VvDcdqtuvBtG9nDqGcGdhWwzF9N4x5949uGWcgcoeROYQ1C-PfiXbcF7K_XPYBqCYS8iB0qvozIAmEPnPqy-MimCCgh3meydyqiFVBAxYXZW3dRMW2j3vZQq3yeq8EpXGlGITOM1ER6CZlSbZft8QfoudNsam1wYohOzWQzyLrSKI8EybEBoJV-dNPmp63W06P_Hx306xRon-ThhPGd8RU_"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Card 3 -->
+                <div class="accordion-item bg-white border border-outline-variant/60 rounded-3xl p-6 md:p-8 cursor-pointer relative reveal shadow-sm">
+                    <div class="flex justify-between items-center pointer-events-none">
+                        <div class="flex items-center gap-6">
+                            <div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center">
+                                <span class="font-bold text-primary">03</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary tracking-tight">Telecom & Control</h3>
+                        </div>
+                        <span class="material-symbols-outlined text-outline">add</span>
+                    </div>
+                    
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 opacity-0 transition-opacity duration-500 delay-100 content-reveal">
+                        <div>
+                            <p class="text-on-surface-variant leading-relaxed mb-6">
+                                Despliegue de redes de fibra óptica y sistemas SCADA para monitoreo y control centralizado en tiempo real de operaciones de tránsito.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Bento Grid Stats (About) -->
+    <section class="py-32 bg-white" id="about">
+        <div class="max-w-[1200px] mx-auto px-margin-mobile">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-primary">Impacto en Números</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Stat Card -->
+                <div class="bg-surface rounded-3xl p-10 flex flex-col items-center justify-center text-center reveal border border-outline-variant/30 hover:-translate-y-2 transition-transform duration-500">
+                    <span class="text-6xl font-bold text-primary mb-2">20+</span>
+                    <span class="text-sm font-semibold uppercase tracking-widest text-on-surface-variant">Años de Trayectoria</span>
+                </div>
+                <!-- Stat Card -->
+                <div class="bg-surface rounded-3xl p-10 flex flex-col items-center justify-center text-center reveal border border-outline-variant/30 hover:-translate-y-2 transition-transform duration-500">
+                    <span class="text-6xl font-bold text-primary mb-2">150+</span>
+                    <span class="text-sm font-semibold uppercase tracking-widest text-on-surface-variant">Proyectos Entregados</span>
+                </div>
+                <!-- Stat Card -->
+                <div class="bg-primary rounded-3xl p-10 flex flex-col items-center justify-center text-center reveal border border-primary hover:-translate-y-2 transition-transform duration-500 shadow-2xl">
+                    <span class="text-6xl font-bold text-secondary mb-2">100%</span>
+                    <span class="text-sm font-semibold uppercase tracking-widest text-white">Cumplimiento Normativo</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="relative py-32 bg-primary overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent"></div>
+        <div class="relative z-10 max-w-3xl mx-auto px-margin-mobile text-center reveal">
+            <h2 class="text-4xl md:text-6xl font-bold text-white tracking-tighter mb-8 leading-tight">
+                Impulsa la evolución de tu infraestructura.
+            </h2>
+            <button class="bg-secondary text-on-secondary-container px-10 py-5 font-bold text-lg rounded-full btn-hover-fx">
+                Contactar Ventas
+            </button>
+        </div>
+    </section>
+
+    <footer class="bg-primary pt-10 pb-6 px-margin-mobile border-t border-white/10">
+        <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-white text-2xl" data-icon="train">train</span>
+                <span class="font-bold text-white">IMA Soluciones</span>
+            </div>
+            <div class="flex gap-6">
+                <a href="#" class="text-sm text-white/60 hover:text-secondary transition-colors">Privacidad</a>
+                <a href="#" class="text-sm text-white/60 hover:text-secondary transition-colors">Términos</a>
+                <a href="#" class="text-sm text-white/60 hover:text-secondary transition-colors">Contacto</a>
+            </div>
+            <p class="text-xs text-white/40">© 2026 Ingenieros en Mantenimiento Aplicado S.A. de C.V.</p>
+        </div>
+    </footer>
+</main>
+
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initial Navbar Setup
+    gsap.set(".reveal", { visibility: "visible" });
+
+    // Navbar scroll interaction (Floating Pill shrink effect)
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            header.classList.add('w-[80%]', 'py-2');
+            header.classList.remove('w-[92%]', 'py-4');
+        } else {
+            header.classList.add('w-[92%]', 'py-4');
+            header.classList.remove('w-[80%]', 'py-2');
+        }
+    });
+
+    // 1. Framer Spring reveals (Scale & Y translate)
+    const reveals = gsap.utils.toArray('.reveal');
+    reveals.forEach((elem) => {
+        gsap.fromTo(elem, 
+            { y: 80, opacity: 0, scale: 0.95 },
+            {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1.4,
+                ease: 'expo.out',
+                scrollTrigger: {
+                    trigger: elem,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                }
+            }
+        );
+    });
+
+    // 2. Image Reveal & Parallax
+    gsap.fromTo(".reveal-img",
+        { clipPath: "inset(100% 0 0 0)", y: 50 },
+        { 
+            clipPath: "inset(0% 0 0 0)", 
+            y: 0, 
+            duration: 1.6, 
+            ease: "expo.inOut",
+            scrollTrigger: {
+                trigger: ".reveal-img",
+                start: "top 80%"
+            }
+        }
+    );
+    
+    gsap.to(".image-parallax", {
+        y: "15%",
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".reveal-img",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true
+        }
+    });
+
+    // 3. Accordion Interaction Logic
+    const accordions = document.querySelectorAll('.accordion-item');
+    accordions.forEach(acc => {
+        acc.addEventListener('mouseenter', () => {
+            acc.classList.add('active');
+            const content = acc.querySelector('.content-reveal');
+            content.style.opacity = '1';
+        });
+        acc.addEventListener('mouseleave', () => {
+            acc.classList.remove('active');
+            const content = acc.querySelector('.content-reveal');
+            content.style.opacity = '0';
+        });
+    });
+
+</script>
+</body>
+</html>
